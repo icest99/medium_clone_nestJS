@@ -1,11 +1,19 @@
+import { TagEntity } from './tag.entity';
 import { Injectable } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 // business logic will be inside service.ts files
 
 @Injectable()
 export class TagService {
-  findAll(): string[] {
-    return ['dragons', 'coffee', 'weather'];
+  constructor(
+    @InjectRepository(TagEntity) //repository help us work with database, injectReposity(TagEntity) means we want our tag repository to work with tags table
+    private readonly tagRepository: Repository<TagEntity>,
+  ) {}
+
+  async findAll(): Promise<TagEntity[]> {
+    return await this.tagRepository.find();
   }
 }
 
