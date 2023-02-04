@@ -1,10 +1,11 @@
-import { UserModule } from './user/user.module';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AppController } from '@app/app.controller';
 import { AppService } from '@app/app.service';
 import { TagModule } from '@app/tag/tag.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import ormconfig from '@app/ormconfig';
+import { UserModule } from '@app/user/user.module';
+import { AuthMiddleware } from './user/middlewares/auth.middleware';
 
 // module is for separating/splitting logic
 // example module of article, module of authentication, module of popular text etc.
@@ -15,4 +16,11 @@ import ormconfig from '@app/ormconfig';
   controllers: [AppController], // Dependency of AppModule
   providers: [AppService],
 })
-export class AppModule {} // AppModule is main Module
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes({
+      path: '*',
+      method: RequestMethod.ALL,
+    });
+  }
+} // AppModule is main Module
