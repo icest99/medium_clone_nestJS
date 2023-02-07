@@ -1,10 +1,13 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity({ name: 'tags' })
-export class TagEntity {
+@Entity({ name: 'follows' })
+export class FollowEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  name: string;
+  followerId: number;
+
+  @Column()
+  followingId: number;
 }
